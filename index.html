@@ -1,39 +1,47 @@
 <!doctype html>
 <html>
+
 <head>
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="turn.min.js"></script>
+	<meta charset="utf-8">
+	<title>Shubham&Rashi Wedding Album</title>
+	<script src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/3/turn.min.js"></script>
+	<style>
+	body {
+		background: #ccc;
+		margin: 0;
+	}
 
-<style type="text/css">
-body{
-	background:#ccc;
-}
-#magazine{
-	width:1000px;
-	height:350px;
-}
-#magazine .turn-page{
-	background-color:#ccc;
-	background-size:100% 100%;
-}
-#magazine .page {
-	width: 500px;
-	height: 350px;
-	background-size: 1000px 350px; /* full image width */
-	background-repeat: no-repeat;
-}
-#magazine .left {
-	background-position: left center;
-}
+	#magazine {
+		width: 100%;
+		margin: auto;
+		aspect-ratio: 3 / 1;
+	}
 
-#magazine .right {
-	background-position: right center;
-}
-</style>
+	#magazine .turn-page {
+		background-color: #ccc;
+		background-size: 100% 100%;
+	}
+
+	#magazine .page {
+		width: 50%;
+		height: auto;
+		background-size: 200% 100%;
+		background-repeat: no-repeat;
+	}
+
+	#magazine .left {
+		background-position: left center;
+	}
+
+	#magazine .right {
+		background-position: right center;
+	}
+	</style>
 </head>
-<body>
 
-<div id="magazine">
+<body>
+	<div id="magazine">
 
     <div style="background-image:url(images/AA.jpg);"></div>
 
@@ -243,37 +251,34 @@ body{
 
     <div style="background-image:url(images/ZZ.jpg);"></div>
 
-
 </div>
-
-
-<script type="text/javascript">
-
-	$(window).ready(function() {
+	<script>
+	$(function() {
 		$('#magazine').turn({
-							display: 'double',
-							acceleration: true,
-							gradients: !$.isTouch,
-							elevation:50,
-							when: {
-								turned: function(e, page) {
-									/*console.log('Current view: ', $(this).turn('view'));*/
-								}
-							}
-						});
+			display: 'double',
+			acceleration: true,
+			elevation: 50,
+			duration: 1500
+		});
+		// Keyboard navigation
+		$(window).on('keydown', function(e) {
+			if(e.keyCode === 37) $('#magazine').turn('previous');
+			else if(e.keyCode === 39) $('#magazine').turn('next');
+		});
+		// Click/touch navigation
+		$('#magazine').on('click touchstart', function(e) {
+			e.preventDefault();
+			var offset = $(this).offset();
+			var width = $(this).width();
+			var x = e.pageX || (e.originalEvent.touches ? e.originalEvent.touches[0].pageX : 0);
+			if(x - offset.left < width / 2) {
+				$(this).turn('previous');
+			} else {
+				$(this).turn('next');
+			}
+		});
 	});
-	
-	
-	$(window).bind('keydown', function(e){
-		
-		if (e.keyCode==37)
-			$('#magazine').turn('previous');
-		else if (e.keyCode==39)
-			$('#magazine').turn('next');
-			
-	});
-
-</script>
-
+	</script>
 </body>
+
 </html>
